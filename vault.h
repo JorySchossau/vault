@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstddef>
 #include <fstream>
+#include <sstream>
 
 // example usage (fields definition block)
 //#define FIELDS \
@@ -165,23 +166,32 @@ namespace VAULT {
 		/// begin writing file
 		std::ofstream out(filename.c_str(), mode);
 		/// only write header if file doesn't exist or overwrite is true
+		std::stringstream ss;
 		if ((fileExists == false) || ((overwrite == true) && (fileExists == true))) {
-			for (auto& name : _priv::names_static_int) out << name << " ";
-			for (auto& name : _priv::names_static_float) out << name << " ";
-			for (auto& name : _priv::names_static_string) out << name << " ";
-			for (auto& name : _priv::names_int) out << name << " ";
-			for (auto& name : _priv::names_float) out << name << " ";
-			for (auto& name : _priv::names_string) out << name << " ";
-			out << std::endl;
+			ss.str("");
+			for (auto& name : _priv::names_static_int) ss << name << " ";
+			for (auto& name : _priv::names_static_float) ss << name << " ";
+			for (auto& name : _priv::names_static_string) ss << name << " ";
+			for (auto& name : _priv::names_int) ss << name << " ";
+			for (auto& name : _priv::names_float) ss << name << " ";
+			for (auto& name : _priv::names_string) ss << name << " ";
+			/// remove trailing space and write string to output
+			ss.seekp(-1,ss.cur);
+			ss << std::endl;
+			out << ss.rdbuf();
 		}
 		for (auto& record : _priv::_records) {
-			for (auto& address : _priv::addresses_static_int) out << *reinterpret_cast<int*>(address) << " ";
-			for (auto& address : _priv::addresses_static_float) out << *reinterpret_cast<float*>(address) << " ";
-			for (auto& address : _priv::addresses_static_string) out << *reinterpret_cast<std::string*>(address) << " ";
-			for (auto& offset : _priv::offsets_int) out << *reinterpret_cast<int*>((char*)&record+offset) << " ";
-			for (auto& offset : _priv::offsets_float) out << *reinterpret_cast<float*>((char*)&record+offset) << " ";
-			for (auto& offset : _priv::offsets_string) out << *reinterpret_cast<std::string*>((char*)&record+offset) << " ";
-			out << std::endl;
+			ss.str("");
+			for (auto& address : _priv::addresses_static_int) ss << *reinterpret_cast<int*>(address) << " ";
+			for (auto& address : _priv::addresses_static_float) ss << *reinterpret_cast<float*>(address) << " ";
+			for (auto& address : _priv::addresses_static_string) ss << *reinterpret_cast<std::string*>(address) << " ";
+			for (auto& offset : _priv::offsets_int) ss << *reinterpret_cast<int*>((char*)&record+offset) << " ";
+			for (auto& offset : _priv::offsets_float) ss << *reinterpret_cast<float*>((char*)&record+offset) << " ";
+			for (auto& offset : _priv::offsets_string) ss << *reinterpret_cast<std::string*>((char*)&record+offset) << " ";
+			/// remove trailing space and write string to output
+			ss.seekp(-1,ss.cur);
+			ss << std::endl;
+			out << ss.rdbuf();
 		}
 	}
 }
