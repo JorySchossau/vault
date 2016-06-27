@@ -1,0 +1,6 @@
+#define FIELD_INT(name)
+#define FIELD_FLOAT(name)
+#define FIELD_STRING(name)
+#define FIELD_STATIC_INT(name)
+#define FIELD_STATIC_FLOAT(name)
+#define FIELD_STATIC_STRING(name)
