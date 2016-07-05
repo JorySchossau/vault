@@ -157,6 +157,10 @@ namespace VAULT {
 		return &*std::prev(VAULT::_priv::_records.end());
 	}
 
+	Record& back() {
+		return VAULT::_priv::_records.back();
+	}
+
 	void save(std::string filename, bool overwrite=false) {
 		std::ios::openmode mode = (overwrite) ? std::ios::out : std::ios::out|std::ios::app;
 		/// check if file exists
