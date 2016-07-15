@@ -2,6 +2,42 @@
 Vault is a generalized data recording and saving utility with strong type information that plays well with IDEs and compilers.
 Vault is for data organizing and exporting, and is well-suited for computational simulation data collection.
 
+## Example
+Here is an example program using Vault to collect and save information.
+```c++
+#include <iostream>
+
+#define FIELDS \
+FIELD( int, update ) \
+FIELD_STATIC( std::string, experiment )
+#include "vault/vault.h"
+
+int main(int argc, char* argv[]) {
+	for (int i=0; i<55; i++) {
+		auto rec = VAULT::newRecord(); // type is VAULT::Record*
+		rec->update = i;
+	}
+	VAULT::Record::experiment = "test_run";
+	VAULT::save("results.ssv");
+	return(0);
+}
+```
+
+Output
+```bash
+$ head results.ssv | column -t
+update  experiment
+0       test_run
+1       test_run
+2       test_run
+3       test_run
+4       test_run
+5       test_run
+6       test_run
+7       test_run
+8       test_run
+```
+
 ## Usage
 
 ###1. Download into your project
