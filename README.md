@@ -19,14 +19,14 @@ FIELD(int, update) \
 FIELD(float, fitness) \
 FIELD_STATIC(std::string, condition) \
 FIELD_STATIC(int, replicate)
-#include "vault/vault.h"
+#include "vault/vault.h" // must be last
 ```
 
 ### 3. Collect data
 Simply ask Vault for a new record each time you're ready to record new data, or if you are still adding data you can get the last record.
 
 ```c++
-auto record = VAULT::newRecord();
+auto record = VAULT::newRecord(); // get a new record
 record->update = i++;
 record->fitness = getFitness();
 ...
@@ -47,5 +47,6 @@ VAULT::save("test_simulation.ssv"); // space-separated file
 ---
 ## To Do
 
- - Allow for multiple simultaneous Record instances within vault
- - Allow for a configurable value separator (default is space).
+ - Multiple simultaneous Record instances saving to different files
+ - Allow flushes to disk to reduce memory footprint.
+ - Configurable value separator (default is space).
