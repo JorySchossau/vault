@@ -47,7 +47,7 @@ namespace VAULT {
 		std::list<Record> _records;
 	}
 
-	Record* newRecord() {
+	Record* const newRecord() {
 		VAULT::_priv::_records.emplace_back();
 		return &*std::prev(VAULT::_priv::_records.end());
 	}
