@@ -69,6 +69,7 @@ namespace VAULT {
 		/// begin writing file
 		std::ofstream out(filename.c_str(), mode);
 		/// only write header if file doesn't exist or overwrite is true
+		/// use a crazy temporary delimiter `~@ which will be replaced with the real one
 #define FIELD( type, name ) name`~@
 #define FIELD_STATIC( type, name ) name`~@
 		if ((fileExists == false) || ((overwrite == true) && (fileExists == true))) {
