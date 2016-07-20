@@ -10,10 +10,14 @@
 //FIELD(int, age) \
 //FIELD_STATIC(float, time) \
 //FIELD_STATIC(std::string, experiment)
+//#define DELIM ',' // optional definition of custom delimiter
 //
 //#include "vault/vault.h" // make sure this is after the definition block
 
 namespace VAULT {
+#ifndef DELIM
+#define DELIM ' '
+#endif
 	// struct declaration
 	struct Record {
 #define STRINGIFY( ... ) STRINGIFYL2( __VA_ARGS__ )
@@ -22,8 +26,8 @@ namespace VAULT {
 #define FIELD_STATIC( type, name ) static type name;
 		FIELDS
 #include "data_undef.h"
-#define FIELD( type, name ) << rec.name << " "
-#define FIELD_STATIC( type, name ) << name << " "
+#define FIELD( type, name ) << rec.name << DELIM
+#define FIELD_STATIC( type, name ) << name << DELIM
 		friend std::ostream&  operator<<(std::ostream& os, const Record& rec) {
 			std::stringstream ss;
 			ss.str("");
@@ -65,10 +69,20 @@ namespace VAULT {
 		/// begin writing file
 		std::ofstream out(filename.c_str(), mode);
 		/// only write header if file doesn't exist or overwrite is true
-#define FIELD( type, name ) name
-#define FIELD_STATIC( type, name ) name
+#define FIELD( type, name ) name`~@
+#define FIELD_STATIC( type, name ) name`~@
 		if ((fileExists == false) || ((overwrite == true) && (fileExists == true))) {
-			out << STRINGIFY(FIELDS) << std::endl;
+			std::string header( STRINGIFY( FIELDS ) );
+			int pos = header.find('`');
+			while(pos != std::string::npos) {
+				if ( (header[pos]=='`') && (header[pos+1]=='~') && (header[pos+2]=='@') ) {
+					header[pos] = DELIM;
+					header.erase(pos+1,3);
+				}
+				pos = header.find('`', pos+1);
+			}
+			header.erase(header.size()-1);
+			out << header << std::endl;
 		}
 #include "data_undef.h"
 		/// write data rows
