@@ -83,6 +83,6 @@ VAULT::save("test_simulation.ssv"); // space-separated file
 ---
 ## To Do
 
- - Multiple simultaneous Record instances saving to different files
- - Allow flushes to disk to reduce memory footprint.
- - Configurable value separator (default is space).
+ - [ ] Multiple simultaneous Record instances saving to different files
+ - [ ] Allow flushes to disk to reduce memory footprint.
+ - [x] Configurable value separator (default is space).
